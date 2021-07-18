@@ -5,16 +5,26 @@ using UnityEngine;
 public class Player : MonoBehaviour
 { 
     private CharacterController _controller;
+    private UIManager _uiManager;
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _gravity = 1.0f;
     [SerializeField] private float _jumpHeight = 25f;
     [SerializeField] private float _yVelocity;  //cache y value of velocity
     [SerializeField] Vector3 velocity;
     private bool _jumpAgain = false; // _canDoubleJump
+    [SerializeField] int _coinCount;
+   
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("UI Manager missing");
+        }
+
     }
 
     void Update()
@@ -47,5 +57,12 @@ public class Player : MonoBehaviour
 
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void AddCoins()
+    {
+        _coinCount++;
+        _uiManager.UpdateCoinDisplay(_coinCount);
+
     }
 }
